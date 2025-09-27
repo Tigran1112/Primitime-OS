@@ -1,11 +1,10 @@
-#include "../output/screen.c"
-#include "../file_system/file.c"
-#include "power.c"
-#include "../file_system/te.c"
+#include <stdbool.h>
+#include "input/power/power.h"
+#include "file_system/file/file.h"
+#include "screen/screen.h"
+#include "input/strcmp/strcmp.h"
 
 bool command_mode = true;
-
-
 
 void exec(char cmd[]) 
 {
@@ -90,12 +89,12 @@ void exec(char cmd[])
             "hello - hello message", 
             "clear - clear console", 
             "help - list commands", 
-            "echo [text] - print text",
+            "write [text] - print text",
             "make [name] - create file",
             "list - show files",
+            "te [file] - text editor",
             "shutdown - shutdown system",
             "reload - reload system",
-            
         };
         
         int count = sizeof(commands) / sizeof(commands[0]);

@@ -1,5 +1,7 @@
-#include "input/keyboard.c"
-#include "shell/interprer.c"
+#include "input/keyboard/keyboard.h"
+#include "interprer/interprer.h"
+#include "screen/screen.h"
+#include <stdbool.h>
 
 void kmain(void) 
 {
@@ -8,6 +10,7 @@ void kmain(void)
     
     int str = 24;
     int str_handler = str;
+    bool set_zero = false;
     while (1) 
     {
         if (command_mode) 
@@ -15,7 +18,15 @@ void kmain(void)
             replace("Primitive OS>", 23, 0x0a);
             str = str_handler;
         }
-        else str = 0;
+        else
+        {
+            if (!set_zero)
+            {
+                str = 0;
+                set_zero = true;
+            }
+            
+        }
         char c = scan2char(read_keyboard());
         if (c == '~')
         {
@@ -25,6 +36,10 @@ void kmain(void)
                 clear_str(str);
                 exec(cmd);
             }
+            else
+            {
+                str++;
+            }
         }
         else if (c == '`')
         {
@@ -33,6 +48,7 @@ void kmain(void)
         else if (c == 'L')
         {
             command_mode = false;
+            set_zero = false;
         }
         else if (c != 0x00)
         {

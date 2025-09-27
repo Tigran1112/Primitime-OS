@@ -1,16 +1,14 @@
-#include <stdbool.h>
 #define MAX_FILES 200
 
-struct File
+struct file
 {
     char name[256];
     char data[2048];
     int size;
-    bool is_directory;
 };
 struct file_system
 {
-    struct File files[128];
+    struct file files[128];
     int count;
 };
 

@@ -54,10 +54,7 @@ char scan2char(unsigned char scancode)
         case 0x39: return ' '; // Space
         case 0x1c: return '~'; // Enter
         case 0x0e: return '`'; // Backspace
-        case 0x1d:
-            if (scancode == 0x1f) return 0x13;
-            else return 0x11;
-        break;
+        case 0x1d: return 'L'; // Save file
         default: return 0x00;
     }
 }
