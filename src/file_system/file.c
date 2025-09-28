@@ -1,6 +1,6 @@
-#include "input/strcmp/strcmp.h"
+#include "base/base.h"
 #include "screen/screen.h"
-#define MAX_FILES 200
+#define max_files 200
 
 struct file
 {

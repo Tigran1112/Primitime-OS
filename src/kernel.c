@@ -1,12 +1,11 @@
 #include "input/keyboard/keyboard.h"
 #include "interprer/interprer.h"
 #include "screen/screen.h"
-#include <stdbool.h>
 
 void kmain(void) 
 {
     clear();
-    print("OS Started - CLI mode. Write help for commands", 0, 0x0a);
+    print("OS Started. Write help for commands", 0, 0x0a);
     
     int str = 24;
     int str_handler = str;
@@ -28,7 +27,7 @@ void kmain(void)
             backspace(str);
             show_cursor();
         }
-        else if (c != 0x00)
+        else if (c != 0x00) 
         {
             hide_cursor();
             print_char(c, str, 0x0a);

@@ -1,4 +1,4 @@
-#define NULL ((void*)0)
+#define null ((void*)0)
 
 int strcmp(const char *s1, const char *s2) 
 {
@@ -26,10 +26,9 @@ char *strchr(const char *str, int ch)
     {
         if (str[i] == ch) return (char*)&str[i];
     }
-    return NULL;
+    return null;
 }
 
-// Добавляем недостающие функции
 char *strcpy(char *dest, const char *src)
 {
     char *d = dest;
@@ -72,4 +71,17 @@ void trim(char *str)
         }
         *d = '\0';
     }
+}
+
+unsigned int rand_seed = 12345;
+
+void srand(unsigned int seed)
+{
+    rand_seed = seed;
+}
+
+int rand()
+{
+    rand_seed = (rand_seed * 1103515245 + 12345) & 0x7fffffff;
+    return (int)rand_seed;
 }

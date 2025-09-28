@@ -2,10 +2,10 @@
 #include "input/power/power.h"
 #include "file_system/file.h"
 #include "screen/screen.h"
-#include "input/strcmp/strcmp.h"
+#include "base/base.h"
 #include "games/racer.h"
 
-#define NULL ((void*)0)
+#define null ((void*)0)
 
 int mode = 0;
 
@@ -57,7 +57,7 @@ void standart_exec(char cmd[])
         char *name = &cmd[3];
         char *text = strchr(name, ' ');
 
-        if (text == NULL) 
+        if (text == null) 
         {
             for (int i = 0; i < fs.count; i++) 
             {
@@ -121,7 +121,14 @@ void standart_exec(char cmd[])
             "make [file] - create file",
             "dlt [file] - delete file",
             "list - show files",
-            "te [file] [text] - text editor",
+            "te - text editor",
+            "- te [file] [name] - modify file",
+            "- te [file] - show file data",
+            "racer - start 'racer' game",
+            "- a - move left",
+            "- d - move right",
+            "- w - move forward",
+            "- [other] - quit game",
             "shutdown - shutdown system",
             "reload - reload system",
         };
@@ -146,6 +153,8 @@ void game_exec(char cmd[])
 {
     if (!racer_running) return;
 
+    game_tick();
+
     if (strcmp(cmd, "a") == 0)
     {
         racer_move_left();
@@ -158,7 +167,6 @@ void game_exec(char cmd[])
     {
         racer_move_forward();
     }
-    
     else
     {
         mode = 0;

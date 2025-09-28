@@ -1,7 +1,9 @@
 #ifndef RACER_H
 #define RACER_H
 
-extern bool racer_running();
+extern bool racer_running;
+
+void game_tick();
 void init_racer();
 void racer_move_left();
 void racer_move_right();

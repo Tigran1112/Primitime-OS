@@ -1,29 +1,75 @@
 #include <stdbool.h>
+#include "base/base.h"
 #include "screen/screen.h"
 
-int indent = 35;
 bool racer_running = false;
-void update_racer()
+
+int indent = 35;
+int indent_conus = 0;
+
+int tree_direction = 0;
+int tree_pos = 0;
+
+void update_tree()
 {
-    clear();
-    replace("Game running", 0, 0x0a);
-    for (int i = 0; i < indent; i++)
+    if (tree_pos >= 24)
     {
-        print_char(' ', 14, 0x0a);
-        print_char(' ', 15, 0x0a);
-        print_char(' ', 16, 0x0a);
-        print_char(' ', 17, 0x0a);
-        print_char(' ', 18, 0x0a);
+        clear_str(tree_pos);
+        clear_str(tree_pos + 1); 
+        clear_str(tree_pos + 2);
+        tree_pos = 0;
+        return;
     }
-    print(" ### ", 14, 0x0c);
-    print("#####", 15, 0x08);
-    print(" ### ", 16, 0x0c);
-    print("#####", 17, 0x08);
-    print(" ### ", 18, 0x0c);
+    
+    clear_str(tree_pos - 1);
+    clear_str(tree_pos);
+    clear_str(tree_pos + 1);
+    
+    print("  #####", tree_pos, 0x02);
+    print("#######", tree_pos + 1, 0x06);
+    print("  #####", tree_pos + 2, 0x02);
+    
+    tree_pos++;
+
+    update_tree();
+}
+void update_tree()
+{
+    if (tree_pos >= 24)
+    {
+        clear_str(tree_pos);
+        clear_str(tree_pos + 1); 
+        clear_str(tree_pos + 2);
+        tree_pos = 0;
+        return;
+    }
+    
+    clear_str(tree_pos - 1);
+    clear_str(tree_pos);
+    clear_str(tree_pos + 1);
+    
+    print("  #####", tree_pos, 0x02);
+    print("#######", tree_pos + 1, 0x06);
+    print("  #####", tree_pos + 2, 0x02);
+    
+    tree_pos++;
+}
+
+void spawn_tree()
+{
+    if (rand() % 100 <= 25)
+    {
+        tree_direction = rand() % 3;
+        switch (tree_direction)
+        {
+            case 0: indent_conus = 20; break;
+            case 1: indent_conus = 35; break;
+            case 2: indent_conus = 55; break;
+        }
+    }
 }
 void init_racer()
 {
-    racer_running = true;
     update_racer();
 }
 void racer_move_left()
@@ -43,6 +89,20 @@ void racer_move_forward()
 }
 void stop_racer()
 {
-    racer_running = false;
     clear();
+}
+void game_tick()
+{
+    static int tree_timer = 0;
+    tree_timer++;
+    if (tree_timer >= 10)
+    {
+        update_tree();
+        tree_timer = 0;
+    }
+    
+    if (rand() % 100 <= 5)
+    {
+        spawn_tree();
+    }
 }
