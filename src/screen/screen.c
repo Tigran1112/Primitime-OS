@@ -25,10 +25,20 @@ char *get_str(int str)
     
     for (int i = 0; i < 80; i++) 
     {
-        char ch = vga[(str * 80 + i) * 2];
-        buffer[i] = ch;
+        buffer[i] = vga[(str * 80 + i) * 2];
     }
     buffer[80] = '\0';
+    return buffer;
+}
+char *get_text()
+{
+    static char buffer[2001];
+
+    for (int i = 0; i < 2000; i++)
+    {
+        buffer[i] = vga[i*2];
+    }
+    buffer[2001] = '\0';
     return buffer;
 }
 void replace(char text[], int str, int color)
@@ -73,4 +83,23 @@ void print_char(char c, int str, int color)
     }
     vga[pos] = c;
     vga[pos + 1] = color;
+}
+//* Cursor
+int pos = (24 * 80) * 2;
+
+void hide_cursor()
+{
+    vga[pos] = EMPTY_SYMBOL;
+    vga[pos + 1] = 0x0a;
+}
+void show_cursor()
+{
+    pos = (24 * 80) * 2;
+    while (vga[pos] != EMPTY_SYMBOL)
+    {
+        pos += 2;
+    }
+
+    vga[pos] = EMPTY_SYMBOL;
+    vga[pos + 1] = 0xff; 
 }

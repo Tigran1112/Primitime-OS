@@ -1,13 +1,17 @@
 #include <stdbool.h>
 #include "input/power/power.h"
-#include "file_system/file/file.h"
+#include "file_system/file.h"
 #include "screen/screen.h"
 #include "input/strcmp/strcmp.h"
+#include "games/racer.h"
 
-bool command_mode = true;
+#define NULL ((void*)0)
 
-void exec(char cmd[]) 
+int mode = 0;
+
+void standart_exec(char cmd[])
 {
+    clear();
     for (int i = 1; i < 8; i++)
     {
         clear_str(i);
@@ -21,7 +25,7 @@ void exec(char cmd[])
     {
         if (fs.count == 0)
         {
-            replace("No files", 2, 0x0a);
+            replace("Files not found", 2, 0x0a);
         }
         else
         {
@@ -36,48 +40,72 @@ void exec(char cmd[])
         if (cmd[5] != '\0' && cmd[5] != ' ')
         {
             create_file(&cmd[5]);
-            clear_str(2);
             replace("File created", 2, 0x0a);
         }
         else
         {
-            clear_str(2);
             replace("Please enter file name", 2, 0x0a);
         }
+    }
+    else if (strncmp(cmd, "dlt ", 4) == 0)
+    {
+        char *name = &cmd[4];
+        delete_file(name);
     }
     else if (strncmp(cmd, "te ", 3) == 0)
     {
-        if (cmd[3] != '\0' && cmd[3] != ' ')
+        char *name = &cmd[3];
+        char *text = strchr(name, ' ');
+
+        if (text == NULL) 
         {
-            open_file(&cmd[3]);
-            char *result = get_str(1);
-            if (strcmp(result, "File not found") != 0)
+            for (int i = 0; i < fs.count; i++) 
             {
-                command_mode = false;
-                clear();
+                if (strcmp(name, fs.files[i].name) == 0) 
+                {
+                    print(fs.files[i].data, 1, 0x0a);
+                    return;
+                }
             }
-            else
+            replace("File not found", 1, 0x0a);
+            return;
+        }
+        
+        *text = '\0';
+        text++;
+        
+        int is_found = -1;
+        for (int i = 0; i < fs.count; i++)
+        {
+            if (strcmp(fs.files[i].name, name) == 0)
             {
-                command_mode = true;
+                is_found = i;
+                break;
             }
         }
-        else
+        
+        if (is_found == -1)
         {
-            clear_str(2);
-            replace("Please enter file name", 2, 0x0a);
+            replace("File not found", 2,0x0a);
+            return;
         }
+        if (text != 0) copy_str(text, fs.files[is_found].data);
+        replace("File updated succesful", 2, 0x0a);
     }
     else if (strcmp(cmd, "shutdown") == 0)
     {
-        clear();
         replace("Shutdown...", 0, 0x0a);
         shutdown();
     }
     else if (strcmp(cmd, "reload") == 0)
     {
-        clear();
         replace("Rebooting...", 0, 0x0a);
         reboot();
+    }
+    else if (strcmp(cmd, "racer") == 0)
+    {
+        mode = 1;
+        init_racer();
     }
     else if (strcmp(cmd, "hello") == 0) 
     {
@@ -90,9 +118,10 @@ void exec(char cmd[])
             "clear - clear console", 
             "help - list commands", 
             "write [text] - print text",
-            "make [name] - create file",
+            "make [file] - create file",
+            "dlt [file] - delete file",
             "list - show files",
-            "te [file] - text editor",
+            "te [file] [text] - text editor",
             "shutdown - shutdown system",
             "reload - reload system",
         };
@@ -111,5 +140,40 @@ void exec(char cmd[])
     else 
     {
         replace("command not found", 1, 0x0a);
+    }
+}
+void game_exec(char cmd[])
+{
+    if (!racer_running) return;
+
+    if (strcmp(cmd, "a") == 0)
+    {
+        racer_move_left();
+    }
+    else if (strcmp(cmd, "d") == 0)
+    {
+        racer_move_right();
+    }
+    else if (strcmp(cmd, "w") == 0)
+    {
+        racer_move_forward();
+    }
+    
+    else
+    {
+        mode = 0;
+        clear();
+    }
+}
+void exec(char cmd[]) 
+{
+    switch (mode)
+    {
+        case 0:
+            standart_exec(cmd);
+        break;
+        case 1:
+            game_exec(cmd);
+        break;
     }
 }

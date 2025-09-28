@@ -2,6 +2,7 @@
 #define INTERPRER_H
 #include <stdbool.h>
 
-extern bool command_mode;
+extern int mode;
 void exec(char cmd[]);
+
 #endif

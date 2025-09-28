@@ -6,7 +6,6 @@ struct file
 {
     char name[256];
     char data[2048];
-    int size;
 };
 struct file_system
 {
@@ -17,5 +16,6 @@ struct file_system
 void copy_str(const char *src, char *dest);
 extern struct file_system fs;
 void create_file(char name[]);
+void delete_file(char name[]);
 
 #endif
