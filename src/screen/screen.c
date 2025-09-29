@@ -1,11 +1,11 @@
 volatile char *vga = (volatile char*)0xb8000;
-#define EMPTY_SYMBOL 0x00
+#define empty_symbol 0x00
 
 void clear()
 {
     for (int i = 0; i < 80 * 25; i++)
     {
-        vga[i * 2] = EMPTY_SYMBOL;
+        vga[i * 2] = empty_symbol;
         vga[i * 2 + 1] = 0x07;
     }
 }
@@ -14,7 +14,7 @@ void clear_str(int str)
     for (int i = 0; i < 80; i++)
     {
         int pos = (str * 80 + i) * 2;
-        vga[pos] = EMPTY_SYMBOL;
+        vga[pos] = empty_symbol;
         vga[pos + 1] = 0x07;
     }
     
@@ -53,18 +53,18 @@ void replace(char text[], int str, int color)
 void backspace(int str)
 {
     int pos = (str * 80) * 2;
-    while (vga[pos] != EMPTY_SYMBOL)
+    while (vga[pos] != empty_symbol)
     {
         pos += 2;
     }
     pos -= 2;
-    vga[pos] = EMPTY_SYMBOL;
+    vga[pos] = empty_symbol;
 }
 void print(char text[], int str, int color)
 {
     int pos = (str * 80) * 2;
     
-    while (vga[pos] != EMPTY_SYMBOL) pos += 2;
+    while (vga[pos] != empty_symbol) pos += 2;
     
     for (int i = 0; text[i] != '\0'; i++) 
     {
@@ -77,7 +77,7 @@ void print(char text[], int str, int color)
 void print_char(char c, int str, int color)
 {
     int pos = (str * 80) * 2;
-    while (vga[pos] != EMPTY_SYMBOL)
+    while (vga[pos] != empty_symbol)
     {
         pos += 2;
     }
@@ -89,17 +89,17 @@ int pos = (24 * 80) * 2;
 
 void hide_cursor()
 {
-    vga[pos] = EMPTY_SYMBOL;
+    vga[pos] = empty_symbol;
     vga[pos + 1] = 0x0a;
 }
 void show_cursor()
 {
     pos = (24 * 80) * 2;
-    while (vga[pos] != EMPTY_SYMBOL)
+    while (vga[pos] != empty_symbol)
     {
         pos += 2;
     }
 
-    vga[pos] = EMPTY_SYMBOL;
+    vga[pos] = empty_symbol;
     vga[pos + 1] = 0xff; 
 }

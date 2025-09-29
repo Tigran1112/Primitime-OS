@@ -1,16 +1,20 @@
-void shutdown() 
-{
-    __asm__ volatile(
-        "mov $0x2000, %ax \n"
-        "mov $0x604, %dx \n"
-        "out %ax, %dx \n"
+#include "interprer/ports/ports.h"
+#include "screen/screen.h"
 
-        "mov $0x2000, %ax \n"
-        "mov $0xb004, %dx \n"
-        "out %ax, %dx \n"
-    );
-}
-void reboot() 
+void shutdown()
 {
-    __asm__ volatile("int $0xff \n");
+    outw(0xb004, 0x2000);
+    outw(0x604, 0x2000);
+    outw(0x4004, 0x3400);
+
+    print("Shutdown failed. Please turn off PC manually (it`s safe. Down`t belive IT teacher)", 0, 0x0a);
+    __asm__ volatile("cli; hlt");
+}
+void reboot()
+{
+    while (inb(0x64) & 0x02) { }
+    
+    outb(0x64, 0xfe);
+
+    __asm__ volatile("int $0xff");
 }

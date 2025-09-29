@@ -1,3 +1,5 @@
+#include "interprer/ports/ports.h"
+
 char scan2char(unsigned char scancode)
 {
     switch (scancode) 
@@ -54,17 +56,11 @@ char scan2char(unsigned char scancode)
         case 0x39: return ' '; // Space
         case 0x1c: return '~'; // Enter
         case 0x0e: return '`'; // Backspace
-        case 0x1d: return 'L'; // Save file
-        default: return 0x00;
+        default:   return 0x00;
     }
 }
 
-unsigned char inb(unsigned short port)
-{
-    unsigned char result;
-    __asm__ __volatile__("inb %1, %0" : "=a"(result) : "Nd"(port));
-    return result;
-}
+
 unsigned char read_keyboard()
 {
     while (!(inb(0x64) & 1));
