@@ -35,7 +35,6 @@
 * te - Text editor
 * shutdown - Power off
 * reload - Reboot
-* 
 ## 🧩 Architecture
 - **Flat file system** - simplicity over complexity
 - **Short commands** - efficiency matters  
