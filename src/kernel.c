@@ -7,12 +7,13 @@ void kmain(void)
     clear();
     print("OS Started. Write help for commands", 0, 0x0a);
     
+    
     int str = 24;
     int str_handler = str;
 
     while (1) 
     {
-        replace("Primitive OS>", 23, 0x0a);
+        replace("Primitive OS>", str - 1, 0x0a);
         str = str_handler;
         char c = scan2char(read_keyboard());
         if (c == '~')

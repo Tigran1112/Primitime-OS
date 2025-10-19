@@ -84,6 +84,23 @@ void print_char(char c, int str, int color)
     vga[pos] = c;
     vga[pos + 1] = color;
 }
+void replace_char(char c, int str, int col, int color)
+{
+    int pos = (str * 80 + col) * 2;
+    vga[pos] = c;
+    vga[pos] = color;
+}
+int get_symbol_color(int str, int col)
+{
+    int pos = (str * 80 + col) * 2;
+    return vga[pos + 1];
+}
+int is_color_same(int old_color, int str, int col)
+{
+    int pos = (str * 80 + col) * 2;
+    if (vga[pos + 1] != old_color) return 0;
+    else return 1;
+}
 //* Cursor
 int pos = (24 * 80) * 2;
 
