@@ -41,15 +41,6 @@ char *get_text()
     buffer[2001] = '\0';
     return buffer;
 }
-void replace(char text[], int str, int color)
-{
-    for (int i = 0; text[i] != '\0'; i++)
-    {
-        int pos = (str * 80 + i) * 2;
-        vga[pos] = text[i];
-        vga[pos + 1] = color;
-    }
-}
 void backspace(int str)
 {
     int pos = (str * 80) * 2;
@@ -84,11 +75,22 @@ void print_char(char c, int str, int color)
     vga[pos] = c;
     vga[pos + 1] = color;
 }
-void replace_char(char c, int str, int col, int color)
+void replace(char c, int str, int col, int color)
 {
     int pos = (str * 80 + col) * 2;
     vga[pos] = c;
-    vga[pos] = color;
+    vga[pos + 1] = color;
+}
+void replace_text(char text[], int str, int col, int color)
+{
+    int pos = (str * 80 + col) * 2;
+    for (int i = 0; text[i] != '\0'; i++)
+    {
+        if (pos >= (str * 80 + 79) * 2) break;
+        vga[pos] = text[i];
+        vga[pos + 1] = color;
+        pos += 2;
+    }
 }
 int get_symbol_color(int str, int col)
 {
