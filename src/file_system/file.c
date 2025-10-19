@@ -33,10 +33,10 @@ void delete_file(char name[])
             }
             fs.count--;
             clear_str(2);
-            replace("File deleted successful", 2, 0, 0x0a);
+            replace("File deleted successful", 2, 0x0a);
             return;
         }
     }
     clear_str(2);
-    replace("File not found", 2, 0, 0x0a);
+    replace("File not found", 2, 0x0a);
 }
