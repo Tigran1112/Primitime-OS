@@ -10,36 +10,33 @@ void post_loading()
     init_rtc();
     clear();
     print("OS Started. Write help for commands", 0, 0x0a);
-}
-void keyboard()
-{
-    char c = scan2char(read_keyboard());
-    if (c == '~')
-    {
-        char *cmd = get_str(str);
-        clear_str(str);
-        exec(cmd);
-    }
-    else if (c == '`')
-    {
-        hide_cursor();
-        backspace(str);
-        show_cursor();
-    }
-    else if (c != 0x00) 
-    {
-        hide_cursor();
-        print_char(c, str, 0x0a);
-        show_cursor();
-    }
-}
-void kmain(void) 
-{
-    post_loading();
+    
+    
+    int str = 24;
+    int str_handler = str;
+
     while (1) 
     {
         replace("Primitive OS>", str - 1, 0x0a);
-        keyboard();
-        tree_update();
+        str = str_handler;
+        char c = scan2char(read_keyboard());
+        if (c == '~')
+        {
+            char *cmd = get_str(str);
+            clear_str(str);
+            exec(cmd);
+        }
+        else if (c == '`')
+        {
+            hide_cursor();
+            backspace(str);
+            show_cursor();
+        }
+        else if (c != 0x00) 
+        {
+            hide_cursor();
+            print_char(c, str, 0x0a);
+            show_cursor();
+        }
     }
 }

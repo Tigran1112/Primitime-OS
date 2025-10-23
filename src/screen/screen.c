@@ -84,6 +84,7 @@ void print_char(char c, int str, int color)
     vga[pos] = c;
     vga[pos + 1] = color;
 }
+<<<<<<< HEAD
 void replace_char(char c, int str, int col, int color)
 {
     int pos = (str * 80 + col) * 2;
@@ -113,6 +114,10 @@ void replace_text(char text[], int str, int col, int color)
 }
 
 int cursor_pos = (24 * 80) * 2;
+=======
+//* Cursor
+int pos = (24 * 80) * 2;
+>>>>>>> parent of d4f4bc9 (add func for game grafics)
 
 void hide_cursor()
 {
