@@ -88,7 +88,7 @@ void replace_char(char c, int str, int col, int color)
 {
     int pos = (str * 80 + col) * 2;
     vga[pos] = c;
-    vga[pos] = color;
+    vga[pos + 1] = color;
 }
 int get_symbol_color(int str, int col)
 {
@@ -101,22 +101,32 @@ int is_color_same(int old_color, int str, int col)
     if (vga[pos + 1] != old_color) return 0;
     else return 1;
 }
-//* Cursor
-int pos = (24 * 80) * 2;
+void replace_text(char text[], int str, int col, int color)
+{
+    int pos = (str * 80 + col) * 2;
+    for (int i = 0; text[i] != '\0'; i++)
+    {
+        vga[pos] = text[i];
+        vga[pos + 1] = color;
+        pos += 2;
+    }
+}
+
+int cursor_pos = (24 * 80) * 2;
 
 void hide_cursor()
 {
-    vga[pos] = empty_symbol;
-    vga[pos + 1] = 0x0a;
+    vga[cursor_pos] = empty_symbol;
+    vga[cursor_pos + 1] = 0x0a;
 }
 void show_cursor()
 {
-    pos = (24 * 80) * 2;
-    while (vga[pos] != empty_symbol)
+    cursor_pos = (24 * 80) * 2;
+    while (vga[cursor_pos] != empty_symbol)
     {
-        pos += 2;
+        cursor_pos += 2;
     }
 
-    vga[pos] = empty_symbol;
-    vga[pos + 1] = 0xff; 
+    vga[cursor_pos] = empty_symbol;
+    vga[cursor_pos + 1] = 0xff; 
 }

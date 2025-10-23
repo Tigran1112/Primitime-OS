@@ -1,42 +1,47 @@
 #include "base/base.h"
 #include "screen/screen.h"
+#include <stdint.h>
+#include <stdbool.h>
+
 #define max_files 200
+#define max_name 128
+#define max_data 1024
+#define disk_size 0x10000
+#define block_size 512
 
-struct file
+typedef struct
 {
-    char name[256];
-    char data[2048];
-};
-struct file_system
-{
-    struct file files[128];
-    int count;
-};
+    char name[max_name];
+    uint32_t offset;
+    uint32_t size;
+    bool used;
+} file;
 
-struct file_system fs;
-
-void create_file(char name[])
+typedef struct
 {
-    copy_str(name, fs.files[fs.count].name);
-    fs.count++;
+    file files[max_files];
+    uint8_t disk[disk_size];
+} file_system;
+
+file_system fs;
+
+void sfs_init(file_system *fs)
+{
+
 }
-void delete_file(char name[])
+int sfs_create(file_system *fs, const char *name, uint16_t size)
 {
-    for (int i = 0; i < fs.count; i++)
-    {
-        if (strcmp(name, fs.files[i].name) == 0)
-        {
-            for (int j = i; j < fs.count - 1; j++)
-            {
-                copy_str(fs.files[j+1].name, fs.files[j].name);
-                copy_str(fs.files[j+1].data, fs.files[j].data);
-            }
-            fs.count--;
-            clear_str(2);
-            replace("File deleted successful", 2, 0x0a);
-            return;
-        }
-    }
-    clear_str(2);
-    replace("File not found", 2, 0x0a);
+
+}
+int sfs_delete(file_system *fs, const char *name)
+{
+
+}
+int sfs_write(file_system *fs, const char *name, uint8_t *data, uint32_t size)
+{
+
+}
+int sfs_read(file_system *fs, const char *name, uint8_t *buffer, uint32_t buf_size)
+{
+    
 }
