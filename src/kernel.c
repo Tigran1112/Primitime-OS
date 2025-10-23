@@ -3,9 +3,7 @@
 #include "screen/screen.h"
 #include "apps/time/time.h"
 
-int old_time = 0;
 int str = 24;
-volatile int tick = 0;
 
 void post_loading()
 {
