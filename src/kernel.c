@@ -5,7 +5,7 @@
 
 int str = 24;
 
-void post_loading()
+void kmain()
 {
     init_rtc();
     clear();
